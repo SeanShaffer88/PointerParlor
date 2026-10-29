@@ -39,10 +39,18 @@ jobs:
         shell: pwsh
         run: |
           $p = Start-Process -FilePath "publish/win-${{ matrix.arch }}/PointerParlor.exe" -ArgumentList "--smoke-test" -PassThru
+          $null = $p.Handle  # keep the handle, or ExitCode reads as empty after the process ends
           if (-not $p.WaitForExit(120000)) { $p.Kill(); throw "Smoke test timed out" }
+          $code = $p.ExitCode
           $log = Join-Path $env:LOCALAPPDATA "PointerParlor/Logs/PointerParlor.log"
-          if (Test-Path $log) { Get-Content $log }
-          if ($p.ExitCode -ne 0) { throw "Smoke test failed with exit code $($p.ExitCode)" }
+          if (Test-Path $log) {
+            Get-Content $log
+            # Surface the log as annotations so it is readable without downloading the job log.
+            if ($code -ne 0) { Get-Content $log | ForEach-Object { Write-Output "::warning title=PointerParlor log::$_" } }
+          } else {
+            Write-Output "::warning::No log was written at $log"
+          }
+          if ($code -ne 0) { throw "Smoke test failed with exit code $code" }
 
       - name: Upload build
         uses: actions/upload-artifact@v6
