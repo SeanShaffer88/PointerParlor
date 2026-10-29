@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and test (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x64
+            runner: windows-latest
+          - arch: arm64
+            runner: windows-11-arm
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Test (core logic, full suite)
+        run: dotnet test tests/PointerParlor.Core.Tests -c Release
+
+      - name: Publish (self-contained)
+        run: dotnet publish src/PointerParlor/PointerParlor.csproj -c Release -r win-${{ matrix.arch }} -o publish/win-${{ matrix.arch }}
+
+      - name: Smoke test (services load and the window builds)
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath "publish/win-${{ matrix.arch }}/PointerParlor.exe" -ArgumentList "--smoke-test" -PassThru
+          if (-not $p.WaitForExit(120000)) { $p.Kill(); throw "Smoke test timed out" }
+          $log = Join-Path $env:LOCALAPPDATA "PointerParlor/Logs/PointerParlor.log"
+          if (Test-Path $log) { Get-Content $log }
+          if ($p.ExitCode -ne 0) { throw "Smoke test failed with exit code $($p.ExitCode)" }
+
+      - name: Upload build
+        uses: actions/upload-artifact@v6
+        with:
+          name: PointerParlor-win-${{ matrix.arch }}
+          path: publish/win-${{ matrix.arch }}
+          if-no-files-found: error
