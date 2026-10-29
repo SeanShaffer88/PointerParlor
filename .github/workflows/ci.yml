@@ -46,7 +46,8 @@ jobs:
           if (Test-Path $log) {
             Get-Content $log
             # Surface the log as annotations so it is readable without downloading the job log.
-            if ($code -ne 0) { Get-Content $log | ForEach-Object { Write-Output "::warning title=PointerParlor log::$_" } }
+            # One annotation holding the whole log (GitHub keeps only 10 annotations per step); %0A is a newline.
+            if ($code -ne 0) { Write-Output ("::warning title=PointerParlor log::" + ((Get-Content $log) -join '%0A')) }
           } else {
             Write-Output "::warning::No log was written at $log"
           }
