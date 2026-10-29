@@ -66,8 +66,20 @@ public static class XamlDiagnostics
         }
     }
 
-    private static bool Probe(XElement element, int depth)
+    /// <summary>
+    /// Loads children before their parent, so when a load fails-fast the process the last logged
+    /// element is the innermost one at fault.
+    /// </summary>
+    private static void Probe(XElement element, int depth)
     {
+        if (depth < 12)
+        {
+            foreach (var child in element.Elements())
+                Probe(child, depth + 1);
+        }
+        if (element.Name.LocalName.Contains('.'))
+            return; // property elements (Grid.RowDefinitions) can't load on their own; their children were probed above
+
         var line = ((System.Xml.IXmlLineInfo)element).LineNumber;
         try
         {
@@ -77,34 +89,16 @@ public static class XamlDiagnostics
                 foreach (var attr in e.Attributes().Where(a => (a.Name.Namespace == X && a.Name.LocalName == "Class") || EventNames.Contains(a.Name.LocalName)).ToList())
                     attr.Remove();
             }
-            if (copy.Name.LocalName.Contains('.'))
-                return true; // property elements (Window.SystemBackdrop) can't load alone; their children are probed below
             copy.SetAttributeValue(XNamespace.Xmlns + "x", X.NamespaceName);
             // Logged first: a load can fail-fast the process, and then this is the last line in the log.
             AppLog.Info($"XAML diagnostics: loading <{element.Name.LocalName}> at line {line}");
             XamlReader.Load(copy.ToString());
             _loaded++;
-            return true;
         }
         catch (Exception ex)
         {
             _failed++;
             AppLog.Error($"XAML diagnostics: <{element.Name.LocalName}> at line {line} failed: {ex.Message.Replace(Environment.NewLine, " ")}");
         }
-        finally
-        {
-            if (element.Name.LocalName.Contains('.') && depth < 8)
-            {
-                foreach (var child in element.Elements())
-                    Probe(child, depth + 1);
-            }
-        }
-        // Narrow down: report the innermost failing elements.
-        if (depth < 8)
-        {
-            foreach (var child in element.Elements())
-                Probe(child, depth + 1);
-        }
-        return false;
     }
 }
