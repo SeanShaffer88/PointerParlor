@@ -2,7 +2,7 @@
 
 Status labels: **Verified** (checked on a real Windows machine), **Partially verified** (CI or tests only), **Unverified**.
 
-- **The app has not been run interactively on Windows yet** (Unverified). CI builds it, runs the Core suite, and launches it with `--smoke-test` (loads services and builds the window, changes nothing).
+- **The app has not been run interactively on Windows yet** (Unverified). The full Core suite (101 tests), Release publishes for x64 and ARM64, and the x64 `--smoke-test` launch were verified locally on Windows. The publish now carries the generated application PRI required for XAML loading. ARM64 execution still requires its native CI runner. Smoke testing loads services and builds the window without applying cursors; it does not validate interactive behavior.
 - **No bundled sets yet.** The gallery shows the schemes included with Windows plus imported sets. The signature and openly licensed sets are a separate piece of work.
 - **Pointer size changes** write `CursorBaseSize` and reload cursors. This matches what the Windows size slider stores, but whether every Windows build picks the new size up without signing out is Unverified.
 - **Screen-inverting pixels** (used by some classic monochrome cursors) are previewed as dark translucent pixels; Windows draws them by inverting the screen.
