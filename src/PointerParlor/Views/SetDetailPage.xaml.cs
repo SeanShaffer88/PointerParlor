@@ -57,6 +57,8 @@ public sealed partial class SetDetailPage : Page
         if (!string.IsNullOrWhiteSpace(_set.Manifest.License)) info.Add("License: " + _set.Manifest.License);
         info.Add($"{_set.Paths.Count} of {CursorRoles.All.Count} pointers");
         SetInfo.Text = string.Join(" · ", info);
+        if (!string.IsNullOrWhiteSpace(_set.Manifest.Description))
+            SetInfo.Text = _set.Manifest.Description + Environment.NewLine + SetInfo.Text;
 
         if (Uri.TryCreate(_set.Manifest.SourceUrl, UriKind.Absolute, out var source) && source.Scheme == Uri.UriSchemeHttps)
         {

@@ -1,0 +1,28 @@
+{
+  "id": "candy",
+  "name": "Candy",
+  "kind": "Signature",
+  "author": "PointerParlor",
+  "license": "MIT",
+  "description": "Glossy pastel pink and lavender with a white candy shell.",
+  "version": 1,
+  "cursors": {
+    "Arrow": "Arrow.cur",
+    "Help": "Help.cur",
+    "AppStarting": "AppStarting.ani",
+    "Wait": "Wait.ani",
+    "Crosshair": "Crosshair.cur",
+    "IBeam": "IBeam.cur",
+    "NWPen": "NWPen.cur",
+    "No": "No.cur",
+    "SizeNS": "SizeNS.cur",
+    "SizeWE": "SizeWE.cur",
+    "SizeNWSE": "SizeNWSE.cur",
+    "SizeNESW": "SizeNESW.cur",
+    "SizeAll": "SizeAll.cur",
+    "UpArrow": "UpArrow.cur",
+    "Hand": "Hand.cur",
+    "Pin": "Pin.cur",
+    "Person": "Person.cur"
+  }
+}

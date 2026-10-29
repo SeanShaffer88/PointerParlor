@@ -2,8 +2,9 @@
 
 Status labels: **Verified** (checked on a real Windows machine), **Partially verified** (CI or tests only), **Unverified**.
 
-- **The app has not been run interactively on Windows yet** (Unverified). The full Core suite (111 tests), Release publishes for x64 and ARM64, and the x64 `--smoke-test` launch were verified locally on Windows. The publish now carries the generated application PRI required for XAML loading. ARM64 execution still requires its native CI runner. Smoke testing loads services and builds the window without applying cursors; it does not validate interactive behavior.
-- **No bundled sets yet.** The gallery shows the schemes included with Windows plus imported sets. The signature and openly licensed sets are a separate piece of work.
+- **The app has not been run interactively on Windows yet** (Unverified). The full Core suite, Release publishes for x64 and ARM64, and the x64 `--smoke-test` launch were verified locally on Windows. The publish carries the generated application PRI required for XAML loading. ARM64 execution requires the native CI runner for each head. Smoke testing loads services and builds the window without applying cursors; it does not validate interactive behavior.
+- **Signature sets have not been applied on a real Windows machine yet** (Partially verified: every file decodes in the Core tests). Their 64 px and larger images are PNG-compressed, which Windows supports for icons and cursors since Vista; whether every pointer size switches cleanly is Unverified.
+- **No openly licensed sets are bundled yet.**
 - **Pointer size changes** write `CursorBaseSize` and reload cursors. This matches what the Windows size slider stores, but whether every Windows build picks the new size up without signing out is Unverified.
 - **Screen-inverting pixels** (used by some classic monochrome cursors) are previewed as dark translucent pixels; Windows draws them by inverting the screen.
 - **Compressed bitmap data** (RLE) inside cursor files is not supported; such files are skipped at import with a message. PNG-compressed images are supported.
