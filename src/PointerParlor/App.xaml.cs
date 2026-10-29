@@ -38,7 +38,11 @@ public partial class App : Application
             AppLog.Error("Startup failed", ex);
             AppLog.Info(ex.ToString().Replace(Environment.NewLine, " | "));
             if (smokeTest)
+            {
+                if (ex is Microsoft.UI.Xaml.Markup.XamlParseException)
+                    XamlDiagnostics.Diagnose("MainWindow.xaml");
                 Environment.Exit(1);
+            }
             throw;
         }
 
