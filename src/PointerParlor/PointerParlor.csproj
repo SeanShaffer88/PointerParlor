@@ -39,6 +39,8 @@
 
   <ItemGroup>
     <Content Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Raw markup for XamlDiagnostics, which re-parses it when a smoke test hits a XAML load failure. -->
+    <EmbeddedResource Include="MainWindow.xaml" LogicalName="Xaml.MainWindow.xaml" />
     <Content Include="..\..\LICENSE" Link="LICENSE" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
     <!-- Sets shipped with the app; copied into the user's library on first run. -->
