@@ -8,8 +8,13 @@ public partial class App : Application
 {
     public App()
     {
+        AppLog.Initialize(Paths.Logs);
         InitializeComponent();
         UnhandledException += (_, e) => AppLog.Error("Unhandled exception", e.Exception);
+        // Release builds report XAML load failures only as "XAML parsing failed"; these name the missing resource or binding.
+        DebugSettings.IsXamlResourceReferenceTracingEnabled = true;
+        DebugSettings.XamlResourceReferenceFailed += (_, e) => AppLog.Error("XAML resource reference failed: " + e.Message);
+        DebugSettings.BindingFailed += (_, e) => AppLog.Error("XAML binding failed: " + e.Message);
     }
 
     public static AppPaths Paths { get; } = AppPaths.ForCurrentUser();
@@ -22,7 +27,6 @@ public partial class App : Application
         var smokeTest = Environment.GetCommandLineArgs().Contains("--smoke-test", StringComparer.OrdinalIgnoreCase);
         try
         {
-            AppLog.Initialize(Paths.Logs);
             AppLog.Info($"Starting PointerParlor {typeof(App).Assembly.GetName().Version}{(smokeTest ? " (smoke test)" : "")}");
             Settings = AppSettings.Load(Paths.Settings);
             Cursors = new CursorService(Paths);
