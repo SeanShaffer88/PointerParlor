@@ -6,12 +6,17 @@ namespace PointerParlor.Core.Schemes;
 /// <summary>A value as it was before a change; a null <see cref="Previous"/> means it did not exist.</summary>
 public sealed record SnapshotEntry(string KeyPath, string ValueName, RegValue? Previous);
 
+/// <summary>Library files that must be restored before restoring the registry.</summary>
+public sealed record LibraryUndo(string Directory, string? StagedDirectory, string? ManifestJson);
+
 /// <summary>
 /// The registry state a change is about to overwrite, recorded before the change is made so
 /// "Undo last apply" can put it back exactly, including deleting values that were not there.
 /// </summary>
 public sealed record ApplySnapshot(string Description, DateTimeOffset CreatedUtc, IReadOnlyList<SnapshotEntry> Entries)
 {
+    public LibraryUndo? LibraryUndo { get; init; }
+
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         WriteIndented = true,

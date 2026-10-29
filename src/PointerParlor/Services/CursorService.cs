@@ -14,12 +14,14 @@ public sealed class CursorService
     private readonly AppPaths _paths;
     private readonly CursorLibrary _library;
     private readonly SetImporter _importer;
+    private readonly UndoJournal _journal;
 
     public CursorService(AppPaths paths)
     {
         _paths = paths;
         _library = new CursorLibrary(paths.Library);
         _importer = new SetImporter(paths.Temp);
+        _journal = new UndoJournal(paths.UndoSnapshot, paths.Library);
         Directory.CreateDirectory(paths.Library);
         LastSnapshot = File.Exists(paths.UndoSnapshot) ? ApplySnapshot.FromJson(File.ReadAllText(paths.UndoSnapshot)) : null;
     }
@@ -101,11 +103,12 @@ public sealed class CursorService
     {
         if (LastSnapshot is null)
             return;
+        _journal.RestoreLibrary(LastSnapshot.LibraryUndo);
         RegistryApplier.Apply(LastSnapshot.UndoChanges());
         RegistryApplier.ReloadCursors();
+        _journal.Clear();
         LastSnapshot = null;
-        File.Delete(_paths.UndoSnapshot);
-        RefreshActive(force: true);
+        Reload();
     }
 
     /// <summary>Saves the current mix as a set under My sets, copying each pointer into the library.</summary>
@@ -123,15 +126,20 @@ public sealed class CursorService
 
     public CursorSet Rename(CursorSet set, string newName)
     {
-        var renamed = _library.Rename(set, newName);
+        if (string.IsNullOrWhiteSpace(newName))
+            throw new ArgumentException("A set needs a name.", nameof(newName));
+        var undo = _journal.CaptureRename(set);
+        var renamed = new CursorSet(set.Manifest with { Name = newName.Trim() }, set.Directory);
         var oldScheme = SchemePlanner.SchemeNameFor(set.Name);
+        var changes = new List<RegistryChange>();
         if (RegistryApplier.Read(RegistryPaths.UserSchemes, oldScheme) is not null)
         {
-            RegistryApplier.Apply(SchemePlanner.RemoveScheme(set.Name));
-            RegistryApplier.Apply([new RegistryChange(RegistryPaths.UserSchemes, SchemePlanner.SchemeNameFor(renamed.Name), RegValue.Expand(SchemeString.Format(renamed.Paths)))]);
+            changes.AddRange(SchemePlanner.RemoveScheme(set.Name));
+            changes.Add(new RegistryChange(RegistryPaths.UserSchemes, SchemePlanner.SchemeNameFor(renamed.Name), RegValue.Expand(SchemeString.Format(renamed.Paths))));
             if (RegistryApplier.Read(RegistryPaths.Cursors, "")?.Text == oldScheme)
-                RegistryApplier.Apply([new RegistryChange(RegistryPaths.Cursors, "", RegValue.Str(SchemePlanner.SchemeNameFor(renamed.Name)))]);
+                changes.Add(new RegistryChange(RegistryPaths.Cursors, "", RegValue.Str(SchemePlanner.SchemeNameFor(renamed.Name))));
         }
+        Run($"Rename {set.Name}", changes, undo, () => _library.Rename(set, newName));
         Reload();
         return renamed;
     }
@@ -141,8 +149,8 @@ public sealed class CursorService
     {
         if (IsInUse(set))
             throw new InvalidOperationException($"{set.Name} is in use. Apply a different set or reset to the Windows default first, then delete it.");
-        _library.Delete(set);
-        RegistryApplier.Apply(SchemePlanner.RemoveScheme(set.Name));
+        var undo = _journal.CaptureDelete(set);
+        Run($"Delete {set.Name}", SchemePlanner.RemoveScheme(set.Name), undo, () => _journal.StageDelete(undo));
         Reload();
     }
 
@@ -159,13 +167,15 @@ public sealed class CursorService
         return set;
     }
 
-    private void Run(string description, IReadOnlyList<RegistryChange> changes)
+    private void Run(string description, IReadOnlyList<RegistryChange> changes, LibraryUndo? libraryUndo = null, Action? changeLibrary = null)
     {
-        var snapshot = ApplySnapshot.Capture(description, changes, RegistryApplier.Read, DateTimeOffset.UtcNow);
-        RegistryApplier.Apply(changes);
-        RegistryApplier.ReloadCursors();
-        LastSnapshot = snapshot;
-        File.WriteAllText(_paths.UndoSnapshot, snapshot.ToJson());
+        var snapshot = ApplySnapshot.Capture(description, changes, RegistryApplier.Read, DateTimeOffset.UtcNow) with { LibraryUndo = libraryUndo };
+        _journal.Execute(snapshot, LastSnapshot, saved => LastSnapshot = saved, () =>
+        {
+            changeLibrary?.Invoke();
+            RegistryApplier.Apply(changes);
+            RegistryApplier.ReloadCursors();
+        });
         AppLog.Info($"{description} ({changes.Count} registry values)");
         RefreshActive(force: true);
     }
