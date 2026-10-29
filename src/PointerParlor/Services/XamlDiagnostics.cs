@@ -18,17 +18,51 @@ public static class XamlDiagnostics
         "ItemClick", "ValueChanged", "SelectionChanged",
     ];
 
+    private static int _loaded;
+    private static int _failed;
+
     public static void Diagnose(string xamlResourceName)
     {
-        using var stream = typeof(XamlDiagnostics).Assembly.GetManifestResourceStream("Xaml." + xamlResourceName);
-        if (stream is null)
+        try
         {
-            AppLog.Error($"XAML diagnostics: {xamlResourceName} is not embedded");
-            return;
+            AppLog.Info($"XAML diagnostics: checking {xamlResourceName}");
+            using var stream = typeof(XamlDiagnostics).Assembly.GetManifestResourceStream("Xaml." + xamlResourceName);
+            if (stream is null)
+            {
+                AppLog.Error($"XAML diagnostics: {xamlResourceName} is not embedded");
+                return;
+            }
+            var doc = XDocument.Load(stream, LoadOptions.SetLineInfo);
+            foreach (var element in doc.Root!.Elements())
+                Probe(element, depth: 0);
+            AppLog.Info($"XAML diagnostics: {_loaded} elements loaded, {_failed} failed");
+            ProbeWindow();
         }
-        var doc = XDocument.Load(stream, LoadOptions.SetLineInfo);
-        foreach (var element in doc.Root!.Elements())
-            Probe(element, depth: 0);
+        catch (Exception ex)
+        {
+            AppLog.Error("XAML diagnostics could not run", ex);
+        }
+    }
+
+    /// <summary>Window-level settings can't go through XamlReader; build a bare window in code with the same ones.</summary>
+    private static void ProbeWindow()
+    {
+        Step("new Window()", () => _ = new Microsoft.UI.Xaml.Window());
+        Step("Window.Title", () => _ = new Microsoft.UI.Xaml.Window { Title = "PointerParlor" });
+        Step("Window.SystemBackdrop = MicaBackdrop", () => _ = new Microsoft.UI.Xaml.Window { SystemBackdrop = new Microsoft.UI.Xaml.Media.MicaBackdrop() });
+    }
+
+    private static void Step(string name, Action action)
+    {
+        try
+        {
+            action();
+            AppLog.Info($"XAML diagnostics: {name} OK");
+        }
+        catch (Exception ex)
+        {
+            AppLog.Error($"XAML diagnostics: {name} failed: {ex.GetType().Name}: {ex.Message.Replace(Environment.NewLine, " ")}");
+        }
     }
 
     private static bool Probe(XElement element, int depth)
@@ -46,10 +80,12 @@ public static class XamlDiagnostics
                 return true; // property elements (Window.SystemBackdrop) can't load alone; their children are probed below
             copy.SetAttributeValue(XNamespace.Xmlns + "x", X.NamespaceName);
             XamlReader.Load(copy.ToString());
+            _loaded++;
             return true;
         }
         catch (Exception ex)
         {
+            _failed++;
             AppLog.Error($"XAML diagnostics: <{element.Name.LocalName}> at line {line} failed: {ex.Message.Replace(Environment.NewLine, " ")}");
         }
         finally
