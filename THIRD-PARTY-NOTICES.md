@@ -30,15 +30,19 @@ Select and Person Select reuse a theme's Normal Select pointer where the theme h
 
 ### banana-cursor
 By Abdulkaiz Khatri (ful1e5). License: GPL-3.0. Source: https://github.com/ful1e5/banana-cursor
-Sets: Banana Blue, Banana Green, Banana Red, Banana.
+Sets: Banana, Banana Blue, Banana Green, Banana Red.
 
 ### Bibata_Cursor
 By Abdulkaiz Khatri (ful1e5). License: GPL-3.0. Source: https://github.com/ful1e5/Bibata_Cursor
 Sets: Bibata Modern Amber, Bibata Modern Classic, Bibata Modern Ice, Bibata Original Amber, Bibata Original Classic, Bibata Original Ice.
 
+### capitaine-cursors
+By Keefer Rourke. License: LGPL-3.0. Source: https://github.com/keeferrourke/capitaine-cursors
+Sets: Capitaine Dark, Capitaine Light.
+
 ### fuchsia-cursor
 By Abdulkaiz Khatri (ful1e5). License: GPL-3.0. Source: https://github.com/ful1e5/fuchsia-cursor
-Sets: Fuchsia Amber, Fuchsia Pop, Fuchsia Red, Fuchsia.
+Sets: Fuchsia, Fuchsia Amber, Fuchsia Pop, Fuchsia Red.
 
 ### Future-cursors
 By yeyushengfan258. License: GPL-3.0. Source: https://github.com/yeyushengfan258/Future-cursors
@@ -46,19 +50,23 @@ Sets: Future.
 
 ### Graphite-cursors
 By vinceliuice. License: GPL-3.0. Source: https://github.com/vinceliuice/Graphite-cursors
-Sets: Graphite Dark Nord, Graphite Dark, Graphite Light Nord, Graphite Light.
+Sets: Graphite Dark, Graphite Dark Nord, Graphite Light, Graphite Light Nord.
 
 ### Layan-cursors
 By vinceliuice. License: GPL-3.0. Source: https://github.com/vinceliuice/Layan-cursors
-Sets: Layan Border, Layan White, Layan.
+Sets: Layan, Layan Border, Layan White.
 
 ### Nordzy-cursors
 By Guillaume Boehm (guillaumeboehm). License: GPL-3.0. Source: https://github.com/guillaumeboehm/Nordzy-cursors
-Sets: Nordzy Catppuccin Frappe Dark, Nordzy Catppuccin Frappe Light, Nordzy Catppuccin Latte Dark, Nordzy Catppuccin Latte Light, Nordzy Catppuccin Macchiato Dark, Nordzy Catppuccin Macchiato Light, Nordzy Catppuccin Mocha Dark, Nordzy Catppuccin Mocha Light, Nordzy White, Nordzy.
+Sets: Nordzy, Nordzy Catppuccin Frappe Dark, Nordzy Catppuccin Frappe Light, Nordzy Catppuccin Latte Dark, Nordzy Catppuccin Latte Light, Nordzy Catppuccin Macchiato Dark, Nordzy Catppuccin Macchiato Light, Nordzy Catppuccin Mocha Dark, Nordzy Catppuccin Mocha Light, Nordzy White.
 
 ### Vimix-cursors
 By vinceliuice. License: GPL-3.0. Source: https://github.com/vinceliuice/Vimix-cursors
-Sets: Vimix White, Vimix.
+Sets: Vimix, Vimix White.
+
+### volantes-cursors
+By Alexey Varfolomeev (varlesh). License: GPL-2.0. Source: https://github.com/varlesh/volantes-cursors
+Sets: Volantes, Volantes Light.
 
 ### XCursor-pro
 By Abdulkaiz Khatri (ful1e5). License: GPL-3.0. Source: https://github.com/ful1e5/XCursor-pro

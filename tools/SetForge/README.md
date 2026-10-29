@@ -32,6 +32,7 @@ dotnet run -c Release --project tools/SetForge -- --open ../open-sources
 - **Xcursor themes** (`XcursorThemeSource`): built Linux themes. Linux nominal 24 px maps to Windows 32 px.
 - **SVG packs** (`SvgPackSource`): Bibata, Fuchsia, Banana and XCursor-Pro, rendered from their SVGs with each
   variant's colors, using the authors' own hotspots and Windows role choices, at their "Large" Windows scale.
+- **SVG + spec themes** (`SvgSpecSource`): Capitaine and Volantes, 24-unit SVGs with per-cursor hotspot specs.
 - Linux names map to Windows roles through `LinuxNames`; themes without Location or Person pointers reuse
   Normal Select. Each set gets the project's license as `LICENSE.txt` and credits in `set.json`.
 

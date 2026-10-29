@@ -230,3 +230,86 @@ public static class MiniToml
         return result;
     }
 }
+
+/// <summary>
+/// SVG themes drawn on a 24-unit canvas with per-cursor hotspot specs, as in Capitaine and Volantes.
+/// A cursor is either name.svg or numbered frames (name-00.svg, name-01.svg, …). Units map like Xcursor
+/// nominal sizes: 24 units fill the same share of a cursor as Linux 24 px does of Windows 32 px.
+/// </summary>
+public sealed class SvgSpecSource : ICursorSource
+{
+    /// <summary>Spec lookup: hotspot in canvas units and frame delay, or null if the theme has no spec for the name.</summary>
+    public delegate (float X, float Y, int DelayMs)? SpecLookup(string name);
+
+    private readonly string _svgDir;
+    private readonly string _suffix;
+    private readonly SpecLookup _spec;
+    private readonly float _canvas;
+
+    /// <param name="suffix">File-name suffix before ".svg" (Volantes' 24-unit drawings end in "_24").</param>
+    public SvgSpecSource(string svgDir, string suffix, SpecLookup spec, float canvas = 24)
+    {
+        _svgDir = svgDir;
+        _suffix = suffix;
+        _spec = spec;
+        _canvas = canvas;
+    }
+
+    public IReadOnlyList<SourceFrame>? Frames(CursorRole role)
+    {
+        foreach (var name in LinuxNames.ForRole[role])
+        {
+            var single = Path.Combine(_svgDir, name + _suffix + ".svg");
+            var frames = File.Exists(single)
+                ? [single]
+                : Directory.GetFiles(_svgDir, name + "-*" + _suffix + ".svg")
+                    .Where(f => int.TryParse(Path.GetFileNameWithoutExtension(f)[(name.Length + 1)..^_suffix.Length], out _))
+                    .Order(StringComparer.Ordinal).ToList();
+            if (frames.Count == 0 || _spec(name) is not { } spec)
+                continue;
+            var step = (int)Math.Ceiling(frames.Count / (double)SvgPackSource.MaxFrames);
+            return frames.Where((_, i) => i % step == 0)
+                .Select(f => new SourceFrame(w => Render(f, spec.X, spec.Y, w), Math.Max(1, spec.DelayMs) * step))
+                .ToList();
+        }
+        return null;
+    }
+
+    private (byte[], int, int) Render(string file, float hx, float hy, int w)
+    {
+        using var svg = new Svg.Skia.SKSvg();
+        using var picture = svg.Load(file) ?? throw new InvalidOperationException($"Could not read {file}.");
+        var scale = w * 0.75f / _canvas;
+        return Raster.Picture(picture, scale, w, hx * scale, hy * scale);
+    }
+
+    /// <summary>Capitaine: src/config/static/NAME.spec holds "xhot yhot"; animated/NAME.spec holds "xhot yhot frames delay".</summary>
+    public static SpecLookup CapitaineSpecs(string configDir) => name =>
+    {
+        foreach (var kind in new[] { "static", "animated" })
+        {
+            var path = Path.Combine(configDir, kind, name + ".spec");
+            if (!File.Exists(path))
+                continue;
+            var parts = File.ReadAllText(path).Split((char[])[' ', '\t', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
+            var delay = parts.Length >= 4 && int.TryParse(parts[3], out var d) ? d : 50;
+            return (float.Parse(parts[0], System.Globalization.CultureInfo.InvariantCulture), float.Parse(parts[1], System.Globalization.CultureInfo.InvariantCulture), delay);
+        }
+        return null;
+    };
+
+    /// <summary>Volantes: xcursorgen configs, src/config/NAME.cursor, lines "size xhot yhot file [delay]"; the 24 px line is used.</summary>
+    public static SpecLookup XcursorgenSpecs(string configDir) => name =>
+    {
+        var path = Path.Combine(configDir, name + ".cursor");
+        if (!File.Exists(path))
+            return null;
+        foreach (var line in File.ReadLines(path))
+        {
+            var parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length >= 4 && parts[0] == "24")
+                return (float.Parse(parts[1]), float.Parse(parts[2]), parts.Length >= 5 && int.TryParse(parts[4], out var d) ? d : 50);
+        }
+        return null;
+    };
+}

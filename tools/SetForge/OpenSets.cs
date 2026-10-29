@@ -84,6 +84,24 @@ public static class OpenSets
             Xcur("future", "Future", "yeyushengfan258", "GPL-3.0", "https://github.com/yeyushengfan258/Future-cursors", "Sleek pointers with a futuristic spinner.", "yeyushengfan258_Future-cursors", "LICENSE", "dist"),
         ]);
 
+        const string CapUrl = "https://github.com/keeferrourke/capitaine-cursors";
+        foreach (var tone in new[] { "dark", "light" })
+        {
+            list.Add(new($"capitaine-{tone}", $"Capitaine {Title(tone)}", "Keefer Rourke", "LGPL-3.0", CapUrl,
+                $"macOS-inspired pointers based on KDE Breeze, {tone} variant.", "keeferrourke_capitaine-cursors", "COPYING",
+                root => new SvgSpecSource(Path.Combine(root, "keeferrourke_capitaine-cursors", "src", "svg", tone), "",
+                    SvgSpecSource.CapitaineSpecs(Path.Combine(root, "keeferrourke_capitaine-cursors", "src", "config")))));
+        }
+
+        const string VolUrl = "https://github.com/varlesh/volantes-cursors";
+        foreach (var (folder, title, desc) in new[] { ("volantes_cursors", "Volantes", "dark"), ("volantes_light_cursors", "Volantes Light", "light") })
+        {
+            list.Add(new(CursorLibraryId(title), title, "Alexey Varfolomeev (varlesh)", "GPL-2.0", VolUrl,
+                $"Material-flavored pointers with a smooth spinner, {desc} variant.", "varlesh_volantes-cursors", "LICENSE",
+                root => new SvgSpecSource(Path.Combine(root, "varlesh_volantes-cursors", "src", folder), "_24",
+                    SvgSpecSource.XcursorgenSpecs(Path.Combine(root, "varlesh_volantes-cursors", "src", "config")))));
+        }
+
         const string Nordzy = "Guillaume Boehm (guillaumeboehm)";
         const string NordzyUrl = "https://github.com/guillaumeboehm/Nordzy-cursors";
         list.Add(Xcur("nordzy", "Nordzy", Nordzy, "GPL-3.0", NordzyUrl, "Pointers in the Nord palette's dark slate.", "guillaumeboehm_Nordzy-cursors", "COPYING", "xcursors/Nordzy-cursors"));
@@ -113,6 +131,7 @@ public static class OpenSets
     public static string? Root { get; set; }
 
     private static string Slug(string s) => s.ToLowerInvariant();
+    private static string CursorLibraryId(string name) => PointerParlor.Core.Library.CursorLibrary.Slug(name);
     private static string Title(string s) => char.ToUpperInvariant(s[0]) + s[1..];
 
     public static void Run(string cloneRoot, string repo, string? only)
