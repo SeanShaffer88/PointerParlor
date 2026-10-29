@@ -47,4 +47,17 @@
     <Content Include="..\..\sets\**" LinkBase="Sets" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- The SDK generates the application PRI in TargetDir, but does not include it in
+       the unpackaged publish output. WinUI needs it to resolve compiled XAML resources. -->
+  <Target Name="IncludeApplicationPriInPublish" AfterTargets="ComputeFilesToPublish">
+    <Error Condition="!Exists('$(TargetDir)$(TargetName).pri')"
+           Text="The generated application resource index is missing: $(TargetDir)$(TargetName).pri" />
+    <ItemGroup>
+      <ResolvedFileToPublish Include="$(TargetDir)$(TargetName).pri">
+        <RelativePath>$(TargetName).pri</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
 </Project>

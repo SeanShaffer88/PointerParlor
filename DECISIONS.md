@@ -17,6 +17,12 @@ A living log of significant architecture, UX, and dependency decisions.
 - **Bundled content is a separate piece of work.** The 12 signature sets (Velvet, Lagoon, Brass, Ink, Chalk, Pixel, Glass, Candy, Blueprint, Phosphor, Neon, Beacon XL) and openly licensed packs come later; v0.1 shows the schemes included with Windows plus imports.
 - **Distribution.** GitHub Releases only, unsigned, stated honestly. No winget.
 
+## 2026-10-29: Include the application resource index when publishing
+
+The unpackaged publish output omitted `PointerParlor.pri`, although the build output contained it. The resulting app failed to load `MainWindow` with a `XamlParseException`. Adding that exact generated PRI to the original published output made the same executable pass `--smoke-test`, confirming the packaging fault. The project now includes the PRI in the publish file list and fails publishing if it is missing. No control, resource, dependency, or application behavior was changed.
+
+Verified locally on Windows x64: the full Core suite passes 101 tests, fresh Release publishes for x64 and ARM64 contain the application PRI, and the fresh x64 publish passes `--smoke-test`. ARM64 execution is left to its native CI runner; interactive cursor application remains unverified.
+
 ## 2026-10-29: Signature sets are generated, not hand-drawn
 
 - **`tools/SetForge` draws all 12 sets** from shared vector geometry (`Shapes.cs`) and per-set styles (`Themes.cs`), using SkiaSharp. One shape change updates every set; one style tweak updates all 17 pointers of a set. The output (`sets/<id>/`) is committed, so building the app never needs the tool.
