@@ -33,10 +33,10 @@ public static class XamlDiagnostics
                 return;
             }
             var doc = XDocument.Load(stream, LoadOptions.SetLineInfo);
+            ProbeWindow();
             foreach (var element in doc.Root!.Elements())
                 Probe(element, depth: 0);
             AppLog.Info($"XAML diagnostics: {_loaded} elements loaded, {_failed} failed");
-            ProbeWindow();
         }
         catch (Exception ex)
         {
@@ -54,6 +54,7 @@ public static class XamlDiagnostics
 
     private static void Step(string name, Action action)
     {
+        AppLog.Info($"XAML diagnostics: trying {name}");
         try
         {
             action();
@@ -79,6 +80,8 @@ public static class XamlDiagnostics
             if (copy.Name.LocalName.Contains('.'))
                 return true; // property elements (Window.SystemBackdrop) can't load alone; their children are probed below
             copy.SetAttributeValue(XNamespace.Xmlns + "x", X.NamespaceName);
+            // Logged first: a load can fail-fast the process, and then this is the last line in the log.
+            AppLog.Info($"XAML diagnostics: loading <{element.Name.LocalName}> at line {line}");
             XamlReader.Load(copy.ToString());
             _loaded++;
             return true;
