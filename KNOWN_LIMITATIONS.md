@@ -2,7 +2,7 @@
 
 Status labels: **Verified** (checked on a real Windows machine), **Partially verified** (CI or tests only), **Unverified**.
 
-- **The app has not been run interactively on Windows yet** (Unverified). CI builds it, runs the Core suite, and launches it with `--smoke-test` (loads services and builds the window, changes nothing).
+- **The app has not been run interactively on Windows yet** (Unverified). The full Core suite (101 tests), Release publishes for x64 and ARM64, and the x64 `--smoke-test` launch were verified locally on Windows. The publish now carries the generated application PRI required for XAML loading. ARM64 execution still requires its native CI runner. Smoke testing loads services and builds the window without applying cursors; it does not validate interactive behavior.
 - **Signature sets have not been applied on a real Windows machine yet** (Partially verified: every file decodes in the Core tests). Their 64 px and larger images are PNG-compressed, which Windows supports for icons and cursors since Vista; whether every pointer size switches cleanly is Unverified.
 - **Openly licensed sets from Linux themes have no Location Select or Person Select pointer** (Linux has no such cursors); those roles reuse the theme's Normal Select. Bibata, Fuchsia, Banana and XCursor-Pro draw their own.
 - **Converted animations stop at 96 px**; at the largest pointer sizes Windows scales them up slightly.
