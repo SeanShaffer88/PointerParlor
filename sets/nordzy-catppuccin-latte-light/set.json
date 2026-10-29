@@ -1,0 +1,29 @@
+{
+  "id": "nordzy-catppuccin-latte-light",
+  "name": "Nordzy Catppuccin Latte Light",
+  "kind": "OpenLicense",
+  "author": "Guillaume Boehm (guillaumeboehm)",
+  "license": "GPL-3.0",
+  "sourceUrl": "https://github.com/guillaumeboehm/Nordzy-cursors",
+  "description": "Nordzy shapes in Catppuccin Latte colors, light variant.",
+  "version": 1,
+  "cursors": {
+    "Arrow": "Arrow.cur",
+    "Help": "Help.cur",
+    "AppStarting": "AppStarting.ani",
+    "Wait": "Wait.ani",
+    "Crosshair": "Crosshair.cur",
+    "IBeam": "IBeam.cur",
+    "NWPen": "NWPen.cur",
+    "No": "No.cur",
+    "SizeNS": "SizeNS.cur",
+    "SizeWE": "SizeWE.cur",
+    "SizeNWSE": "SizeNWSE.cur",
+    "SizeNESW": "SizeNESW.cur",
+    "SizeAll": "SizeAll.cur",
+    "UpArrow": "UpArrow.cur",
+    "Hand": "Hand.cur",
+    "Pin": "Pin.cur",
+    "Person": "Person.cur"
+  }
+}

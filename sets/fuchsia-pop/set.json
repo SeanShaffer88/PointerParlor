@@ -1,0 +1,29 @@
+{
+  "id": "fuchsia-pop",
+  "name": "Fuchsia Pop",
+  "kind": "OpenLicense",
+  "author": "Abdulkaiz Khatri (ful1e5)",
+  "license": "GPL-3.0",
+  "sourceUrl": "https://github.com/ful1e5/fuchsia-cursor",
+  "description": "Bold, playful pointers in peach and white.",
+  "version": 1,
+  "cursors": {
+    "Arrow": "Arrow.cur",
+    "Help": "Help.cur",
+    "AppStarting": "AppStarting.ani",
+    "Wait": "Wait.ani",
+    "Crosshair": "Crosshair.cur",
+    "IBeam": "IBeam.cur",
+    "NWPen": "NWPen.cur",
+    "No": "No.cur",
+    "SizeNS": "SizeNS.cur",
+    "SizeWE": "SizeWE.cur",
+    "SizeNWSE": "SizeNWSE.cur",
+    "SizeNESW": "SizeNESW.cur",
+    "SizeAll": "SizeAll.cur",
+    "UpArrow": "UpArrow.cur",
+    "Hand": "Hand.cur",
+    "Pin": "Pin.cur",
+    "Person": "Person.cur"
+  }
+}

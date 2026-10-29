@@ -25,3 +25,13 @@ A living log of significant architecture, UX, and dependency decisions.
 - **Sizes 32, 48, 64, 96, 128 px** in every file, so sets stay sharp at larger pointer sizes. Images of 64 px and up are stored PNG-compressed, which keeps the 12 sets near 11 MB instead of about 45 MB; 32 and 48 px stay as classic bitmaps that every Windows version reads.
 - **Busy and Working in Background** are 10-frame animations at 4/60 s per frame.
 - **Signature sets are MIT licensed** with the app, author "PointerParlor".
+
+## 2026-10-29: Openly licensed sets come from licensed Linux themes, converted
+
+- **Only explicitly licensed packs are bundled.** Cursor gallery sites (Cursors-4u, cursor collections and similar) typically allow personal use but not redistribution, and many artists there keep their rights, so none are bundled. The maintainer asked for as many complete sets as possible and no single cursors.
+- **Sources are open-source Linux cursor themes on GitHub** whose licenses allow redistribution: Bibata, Fuchsia, Banana, XCursor-Pro (Abdulkaiz Khatri), Graphite, Layan, Vimix (vinceliuice), Future (yeyushengfan258), Nordzy (Guillaume Boehm). All GPL-3.0.
+- **Converted, not hand-copied.** `tools/SetForge --open` reads built Xcursor themes (new `XcursorReader` in Core) or renders the authors' SVGs (Svg.Skia), keeping the authors' hotspots and Windows role choices. One converter covers dozens of sets and reruns when upstream changes.
+- **GPL compliance.** Each set ships its license text, author and source address; the app stays MIT (the sets are separate works bundled alongside). The conversion tool is in this repo and the source artwork is at each project's address.
+- **Variants.** Bibata's six main variants, four Fuchsia, four Banana, three XCursor-Pro, every Graphite/Layan/Vimix variant, and Nordzy's base, white and Catppuccin dark/light flavors. Left-handed variants and Nordzy's 50+ single-accent variants are left out as near-duplicates.
+- **Breeze is not bundled**: its repository gives no license for the cursor files themselves.
+- **Size budget.** Converted animations keep 32–96 px (no 128 px) and at most 30 frames; the 37 sets add about 30 MB.
