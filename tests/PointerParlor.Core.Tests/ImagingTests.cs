@@ -32,6 +32,18 @@ public class CurDecoderTests
     }
 
     [Fact]
+    public void Writer_stores_large_images_as_png_and_they_decode_back()
+    {
+        var bytes = CursorWriter.WriteCur([Fixtures.Square(32, 1, 2, 3, 4, 5), Fixtures.Square(64, 1, 2, 3, 9, 10)], pngFromSize: 64);
+        var file = CurDecoder.Decode(bytes);
+
+        Assert.False(file.Images[0].IsPng);
+        var big = file.Images[1];
+        Assert.True(big.IsPng);
+        Assert.Equal((64, 64, 9, 10), (big.Width, big.Height, big.HotspotX, big.HotspotY));
+    }
+
+    [Fact]
     public void Passes_embedded_png_through_and_reads_its_size()
     {
         var png = PngWriter.EncodeBgra(256, 256, new byte[256 * 256 * 4]);

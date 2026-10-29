@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- 12 signature cursor sets: Velvet, Lagoon, Brass, Ink, Chalk, Pixel, Glass, Candy, Blueprint, Phosphor, Neon and Beacon XL, each with all 17 pointers at 32 to 128 px and animated busy cursors.
 - Gallery of cursor sets grouped by source, with search and an "In use" badge.
 - Set detail view with animated previews of all 17 pointers; apply one pointer or the whole set.
 - Applying a set registers it as a Windows scheme (`PointerParlor - <set>`).

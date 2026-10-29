@@ -31,6 +31,9 @@ public sealed record SetManifest
     public string? License { get; init; }
     public string? SourceUrl { get; init; }
 
+    /// <summary>One sentence describing the set's look, shown on its page.</summary>
+    public string? Description { get; init; }
+
     /// <summary>Bundled sets carry a version so a newer app can refresh the copy in the library.</summary>
     public int Version { get; init; } = 1;
 

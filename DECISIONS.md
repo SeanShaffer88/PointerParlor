@@ -16,3 +16,12 @@ A living log of significant architecture, UX, and dependency decisions.
 - **Look.** The Fanned Set icon's palette (teal accent, coral and gold highlights) over Mica, in light and dark themes, instead of the black/red family look. Chosen by the maintainer.
 - **Bundled content is a separate piece of work.** The 12 signature sets (Velvet, Lagoon, Brass, Ink, Chalk, Pixel, Glass, Candy, Blueprint, Phosphor, Neon, Beacon XL) and openly licensed packs come later; v0.1 shows the schemes included with Windows plus imports.
 - **Distribution.** GitHub Releases only, unsigned, stated honestly. No winget.
+
+## 2026-10-29: Signature sets are generated, not hand-drawn
+
+- **`tools/SetForge` draws all 12 sets** from shared vector geometry (`Shapes.cs`) and per-set styles (`Themes.cs`), using SkiaSharp. One shape change updates every set; one style tweak updates all 17 pointers of a set. The output (`sets/<id>/`) is committed, so building the app never needs the tool.
+- **Two shape families.** *Solid*: filled shapes with outlines (Velvet, Lagoon, Brass, Ink, Pixel, Candy, Blueprint, Phosphor, Beacon XL). *Line*: rounded outlines with chevron and corner-bracket resize cursors, colored badges and a gradient spinner (Glass, Chalk, Neon). The Line family takes its *style* from the maintainer's reference, the Outlier cursor set by anoshione; no Outlier artwork is copied.
+- **Ink and Neon** take cues from the maintainer's graffiti-eye reference: rough ink edges with crimson, cyan and orange paint splatter (Ink), and a glitching cyan/pink color split with orange accents (Neon).
+- **Sizes 32, 48, 64, 96, 128 px** in every file, so sets stay sharp at larger pointer sizes. Images of 64 px and up are stored PNG-compressed, which keeps the 12 sets near 11 MB instead of about 45 MB; 32 and 48 px stay as classic bitmaps that every Windows version reads.
+- **Busy and Working in Background** are 10-frame animations at 4/60 s per frame.
+- **Signature sets are MIT licensed** with the app, author "PointerParlor".

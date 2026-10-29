@@ -24,5 +24,6 @@ must also set `license` and `sourceUrl` and be credited in `THIRD-PARTY-NOTICES.
 the Windows registry names: Arrow, Help, AppStarting, Wait, Crosshair, IBeam, NWPen, No, SizeNS,
 SizeWE, SizeNWSE, SizeNESW, SizeAll, UpArrow, Hand, Pin, Person.
 
-No sets are bundled yet: the 12 signature sets and the openly licensed packs are a separate piece of
-work. Until then the gallery shows the schemes included with Windows plus anything you import.
+The 12 signature sets (velvet, lagoon, brass, ink, chalk, pixel, glass, candy, blueprint, phosphor,
+neon, beacon-xl) are drawn by `tools/SetForge`; do not edit their files by hand, change the generator
+and run it again. Preview sheets are in `docs/sets/`. Openly licensed packs are not bundled yet.

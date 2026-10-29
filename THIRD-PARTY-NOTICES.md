@@ -14,6 +14,11 @@ https://github.com/dotnet/runtime
 Copyright (c) .NET Foundation and Contributors. MIT License.
 https://github.com/CommunityToolkit/dotnet
 
+## SkiaSharp (build tool only, not shipped)
+Copyright (c) Microsoft Corporation. MIT License. Used by tools/SetForge to draw the signature sets.
+https://github.com/mono/SkiaSharp
+
 ## Cursor sets
+The 12 signature sets are original PointerParlor artwork, MIT licensed with the app.
 No third-party cursor sets are bundled yet. Each openly licensed set added to `sets/` will be listed
 here with its author, license and source.

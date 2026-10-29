@@ -12,12 +12,14 @@ public sealed record CursorFrameSource(int Width, int Height, int HotspotX, int 
 /// </summary>
 public static class CursorWriter
 {
-    public static byte[] WriteCur(IReadOnlyList<CursorFrameSource> images)
+    /// <param name="pngFromSize">Images at least this wide are stored PNG-compressed (Windows Vista and later read these);
+    /// smaller ones as a 32-bit bitmap with an AND mask, which every Windows version reads.</param>
+    public static byte[] WriteCur(IReadOnlyList<CursorFrameSource> images, int pngFromSize = int.MaxValue)
     {
         if (images.Count == 0)
             throw new ArgumentException("A cursor needs at least one image.", nameof(images));
 
-        var bodies = images.Select(EncodeDib).ToList();
+        var bodies = images.Select(img => img.Width >= pngFromSize ? PngWriter.EncodeBgra(img.Width, img.Height, img.Bgra) : EncodeDib(img)).ToList();
         using var ms = new MemoryStream();
         using var w = new BinaryWriter(ms);
         w.Write((ushort)0);
