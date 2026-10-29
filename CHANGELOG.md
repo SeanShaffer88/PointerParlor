@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Added
+- 41 openly licensed cursor sets converted from Linux themes: Bibata (6), Fuchsia (4), Banana (4), XCursor-Pro (3), Graphite (4), Layan (3), Vimix (2), Future, Nordzy (10), Capitaine (2) and Volantes (2), each credited with its license.
 - 12 signature cursor sets: Velvet, Lagoon, Brass, Ink, Chalk, Pixel, Glass, Candy, Blueprint, Phosphor, Neon and Beacon XL, each with all 17 pointers at 32 to 128 px and animated busy cursors.
 - Gallery of cursor sets grouped by source, with search and an "In use" badge.
 - Set detail view with animated previews of all 17 pointers; apply one pointer or the whole set.

@@ -39,3 +39,13 @@ All apply, rename, and delete operations now atomically persist the complete und
 Restoration and cleanup accept only immediate children of the owned library/staging roots and reject symbolic links or junctions. A conflicting restored directory is never overwritten. Core regression tests cover durable-before-mutation ordering, persistence failure, rename/delete restoration after journal reload, staging rollback, path escape refusal, and expiration of the previous staged set. No UI, dependency, or registry access boundary changed; `RegistryApplier` remains the only registry writer.
 
 The full Core suite passes 111 tests on Windows, including old snapshot compatibility, occupied-directory preservation, and actual junction/ancestor refusal. The x64 Release publish passes `--smoke-test`; ARM64 publishes successfully, with native execution left to CI.
+
+## 2026-10-29: Openly licensed sets come from licensed Linux themes, converted
+
+- **Only explicitly licensed packs are bundled.** Cursor gallery sites (Cursors-4u, cursor collections and similar) typically allow personal use but not redistribution, and many artists there keep their rights, so none are bundled. The maintainer asked for as many complete sets as possible and no single cursors.
+- **Sources are open-source Linux cursor themes on GitHub** whose licenses allow redistribution: Bibata, Fuchsia, Banana, XCursor-Pro (Abdulkaiz Khatri), Graphite, Layan, Vimix (vinceliuice), Future (yeyushengfan258), Nordzy (Guillaume Boehm), all GPL-3.0; Capitaine (Keefer Rourke, LGPL-3.0); Volantes (Alexey Varfolomeev, GPL-2.0).
+- **Converted, not hand-copied.** `tools/SetForge --open` reads built Xcursor themes (new `XcursorReader` in Core) or renders the authors' SVGs (Svg.Skia), keeping the authors' hotspots and Windows role choices. One converter covers dozens of sets and reruns when upstream changes.
+- **GPL compliance.** Each set ships its license text, author and source address; the app stays MIT (the sets are separate works bundled alongside). The conversion tool is in this repo and the source artwork is at each project's address.
+- **Variants.** Bibata's six main variants, four Fuchsia, four Banana, three XCursor-Pro, every Graphite/Layan/Vimix variant, and Nordzy's base, white and Catppuccin dark/light flavors. Left-handed variants and Nordzy's 50+ single-accent variants are left out as near-duplicates.
+- **Breeze is not bundled**: its repository gives no license for the cursor files themselves.
+- **Size budget.** Converted animations keep 32–96 px (no 128 px) and at most 30 frames; the 41 sets add about 32 MB.

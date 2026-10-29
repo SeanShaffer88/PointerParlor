@@ -5,10 +5,20 @@ using PointerParlor.SetForge;
 using SkiaSharp;
 
 // Draws every signature set into <repo>/sets and a preview sheet per set into <repo>/docs/sets.
-// Usage: dotnet run -c Release --project tools/SetForge [-- <repo root>] [--only <id>]
+// Usage: dotnet run -c Release --project tools/SetForge [-- --only <id>]
+//        dotnet run -c Release --project tools/SetForge -- --open <folder of clones> [--only <id>]
 
-var repo = args.FirstOrDefault(a => !a.StartsWith("--") && Directory.Exists(a)) ?? FindRepoRoot();
-var only = args.SkipWhile(a => a != "--only").Skip(1).FirstOrDefault();
+string? Arg(string name) => args.SkipWhile(a => a != name).Skip(1).FirstOrDefault();
+var repo = Arg("--repo") ?? FindRepoRoot();
+var only = Arg("--only");
+
+if (Arg("--open") is { } cloneRoot)
+{
+    // Openly licensed sets converted from Linux cursor themes; see OpenSets.cs.
+    OpenSets.Root = cloneRoot;
+    OpenSets.Run(cloneRoot, repo, only);
+    return;
+}
 int[] sizes = [32, 48, 64, 96, 128];
 const int PngFromSize = 64;   // larger images are stored PNG-compressed to keep files small
 const int SpinnerFrames = 10;

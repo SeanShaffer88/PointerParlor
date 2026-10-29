@@ -19,6 +19,55 @@ Copyright (c) Microsoft Corporation. MIT License. Used by tools/SetForge to draw
 https://github.com/mono/SkiaSharp
 
 ## Cursor sets
+
 The 12 signature sets are original PointerParlor artwork, MIT licensed with the app.
-No third-party cursor sets are bundled yet. Each openly licensed set added to `sets/` will be listed
-here with its author, license and source.
+
+The openly licensed sets below were converted from their authors' published themes by `tools/SetForge`
+and keep their own licenses; they are not covered by PointerParlor's MIT license. Each set's folder
+includes its full license text as `LICENSE.txt`. The source artwork (SVG drawings or cursor themes) is
+available at each project's address below, and the conversion tool is in this repository. Location
+Select and Person Select reuse a theme's Normal Select pointer where the theme has none.
+
+### banana-cursor
+By Abdulkaiz Khatri (ful1e5). License: GPL-3.0. Source: https://github.com/ful1e5/banana-cursor
+Sets: Banana, Banana Blue, Banana Green, Banana Red.
+
+### Bibata_Cursor
+By Abdulkaiz Khatri (ful1e5). License: GPL-3.0. Source: https://github.com/ful1e5/Bibata_Cursor
+Sets: Bibata Modern Amber, Bibata Modern Classic, Bibata Modern Ice, Bibata Original Amber, Bibata Original Classic, Bibata Original Ice.
+
+### capitaine-cursors
+By Keefer Rourke. License: LGPL-3.0. Source: https://github.com/keeferrourke/capitaine-cursors
+Sets: Capitaine Dark, Capitaine Light.
+
+### fuchsia-cursor
+By Abdulkaiz Khatri (ful1e5). License: GPL-3.0. Source: https://github.com/ful1e5/fuchsia-cursor
+Sets: Fuchsia, Fuchsia Amber, Fuchsia Pop, Fuchsia Red.
+
+### Future-cursors
+By yeyushengfan258. License: GPL-3.0. Source: https://github.com/yeyushengfan258/Future-cursors
+Sets: Future.
+
+### Graphite-cursors
+By vinceliuice. License: GPL-3.0. Source: https://github.com/vinceliuice/Graphite-cursors
+Sets: Graphite Dark, Graphite Dark Nord, Graphite Light, Graphite Light Nord.
+
+### Layan-cursors
+By vinceliuice. License: GPL-3.0. Source: https://github.com/vinceliuice/Layan-cursors
+Sets: Layan, Layan Border, Layan White.
+
+### Nordzy-cursors
+By Guillaume Boehm (guillaumeboehm). License: GPL-3.0. Source: https://github.com/guillaumeboehm/Nordzy-cursors
+Sets: Nordzy, Nordzy Catppuccin Frappe Dark, Nordzy Catppuccin Frappe Light, Nordzy Catppuccin Latte Dark, Nordzy Catppuccin Latte Light, Nordzy Catppuccin Macchiato Dark, Nordzy Catppuccin Macchiato Light, Nordzy Catppuccin Mocha Dark, Nordzy Catppuccin Mocha Light, Nordzy White.
+
+### Vimix-cursors
+By vinceliuice. License: GPL-3.0. Source: https://github.com/vinceliuice/Vimix-cursors
+Sets: Vimix, Vimix White.
+
+### volantes-cursors
+By Alexey Varfolomeev (varlesh). License: GPL-2.0. Source: https://github.com/varlesh/volantes-cursors
+Sets: Volantes, Volantes Light.
+
+### XCursor-pro
+By Abdulkaiz Khatri (ful1e5). License: GPL-3.0. Source: https://github.com/ful1e5/XCursor-pro
+Sets: XCursor Pro Dark, XCursor Pro Light, XCursor Pro Red.

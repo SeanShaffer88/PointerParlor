@@ -26,4 +26,6 @@ SizeWE, SizeNWSE, SizeNESW, SizeAll, UpArrow, Hand, Pin, Person.
 
 The 12 signature sets (velvet, lagoon, brass, ink, chalk, pixel, glass, candy, blueprint, phosphor,
 neon, beacon-xl) are drawn by `tools/SetForge`; do not edit their files by hand, change the generator
-and run it again. Preview sheets are in `docs/sets/`. Openly licensed packs are not bundled yet.
+and run it again. Preview sheets are in `docs/sets/`. The openly licensed sets (`kind: OpenLicense`) are converted from their authors' published themes by
+`tools/SetForge --open`. Each keeps its own license (GPL-3.0, GPL-2.0 or LGPL-3.0) in `LICENSE.txt`, with
+author and source in `set.json` and credits in `THIRD-PARTY-NOTICES.md`.

@@ -1,0 +1,29 @@
+{
+  "id": "volantes-light",
+  "name": "Volantes Light",
+  "kind": "OpenLicense",
+  "author": "Alexey Varfolomeev (varlesh)",
+  "license": "GPL-2.0",
+  "sourceUrl": "https://github.com/varlesh/volantes-cursors",
+  "description": "Material-flavored pointers with a smooth spinner, light variant.",
+  "version": 1,
+  "cursors": {
+    "Arrow": "Arrow.cur",
+    "Help": "Help.cur",
+    "AppStarting": "AppStarting.ani",
+    "Wait": "Wait.ani",
+    "Crosshair": "Crosshair.cur",
+    "IBeam": "IBeam.cur",
+    "NWPen": "NWPen.cur",
+    "No": "No.cur",
+    "SizeNS": "SizeNS.cur",
+    "SizeWE": "SizeWE.cur",
+    "SizeNWSE": "SizeNWSE.cur",
+    "SizeNESW": "SizeNESW.cur",
+    "SizeAll": "SizeAll.cur",
+    "UpArrow": "UpArrow.cur",
+    "Hand": "Hand.cur",
+    "Pin": "Pin.cur",
+    "Person": "Person.cur"
+  }
+}

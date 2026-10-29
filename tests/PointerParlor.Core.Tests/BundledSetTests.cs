@@ -22,6 +22,50 @@ public class BundledSetTests
 
     public static TheoryData<string> Ids() => new(SignatureIds);
 
+    /// <summary>Every openly licensed set under sets/ (converted by tools/SetForge --open).</summary>
+    public static TheoryData<string> OpenIds()
+    {
+        var ids = Directory.EnumerateDirectories(SetsRoot())
+            .Where(d => CursorLibrary.ReadManifest(Path.Combine(d, "set.json"), out _)?.Kind == SetKind.OpenLicense)
+            .Select(Path.GetFileName)
+            .Order()
+            .ToList();
+        return new(ids!);
+    }
+
+    [Fact]
+    public void Open_sets_are_bundled()
+    {
+        Assert.True(((IEnumerable<object[]>)OpenIds()).Count() >= 30, "expected the converted openly licensed sets under sets/");
+    }
+
+    [Theory]
+    [MemberData(nameof(OpenIds))]
+    public void Open_sets_carry_their_license_and_credits_and_every_pointer_decodes(string id)
+    {
+        var dir = Path.Combine(SetsRoot(), id);
+        var manifest = CursorLibrary.ReadManifest(Path.Combine(dir, "set.json"), out var error);
+        Assert.True(manifest is not null, error);
+        Assert.False(string.IsNullOrWhiteSpace(manifest.Author));
+        Assert.False(string.IsNullOrWhiteSpace(manifest.License));
+        Assert.StartsWith("https://", manifest.SourceUrl);
+        Assert.True(File.Exists(Path.Combine(dir, "LICENSE.txt")), $"{id} is missing its LICENSE.txt");
+
+        var set = new CursorSet(manifest, dir);
+        Assert.True(set.IsComplete, $"{id} is missing pointers");
+        foreach (var path in set.Paths.Values)
+        {
+            var asset = CursorReader.ReadFile(path);
+            Assert.All(asset.Frames.SelectMany(f => f.Images), img =>
+            {
+                Assert.Contains(img.Width, Sizes);
+                Assert.InRange(img.HotspotX, 0, img.Width - 1);
+                Assert.InRange(img.HotspotY, 0, img.Height - 1);
+            });
+            Assert.Contains(32, asset.Frames[0].Images.Select(i => i.Width));
+        }
+    }
+
     [Fact]
     public void All_twelve_signature_sets_install_into_a_library()
     {
@@ -31,9 +75,9 @@ public class BundledSetTests
         var installed = lib.InstallBundled(SetsRoot());
         var (sets, problems) = lib.LoadAll();
 
-        Assert.Equal(SignatureIds.Order(), installed.Order());
+        Assert.Equal(SignatureIds.Order(), installed.Where(SignatureIds.Contains).Order());
         Assert.Empty(problems);
-        Assert.All(sets, s =>
+        Assert.All(sets.Where(s => s.Kind == SetKind.Signature), s =>
         {
             Assert.Equal(SetKind.Signature, s.Kind);
             Assert.True(s.IsComplete, $"{s.Name} is missing pointers");
