@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- All testable logic: plain .NET, no Windows APIs. The app shell owns the registry and the UI. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>PointerParlor.Core</RootNamespace>
+  </PropertyGroup>
+
+</Project>
