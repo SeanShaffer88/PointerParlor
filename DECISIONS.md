@@ -23,6 +23,14 @@ The unpackaged publish output omitted `PointerParlor.pri`, although the build ou
 
 Verified locally on Windows x64: the full Core suite passes 101 tests, fresh Release publishes for x64 and ARM64 contain the application PRI, and the fresh x64 publish passes `--smoke-test`. ARM64 execution is left to its native CI runner; interactive cursor application remains unverified.
 
+## 2026-10-29: Persist undo before changing registry or library files
+
+All apply, rename, and delete operations now atomically persist the complete undo journal before their first mutation. A persistence failure refuses the operation. The in-memory undo state is published before registry writes so a partly failed apply remains recoverable. Rename includes its original manifest; delete moves the set into a private library-local `.undo` directory instead of destroying files still needed for undo. Undo restores those files before restoring registry paths. A failed mutation restores the library files and retains the journal for registry recovery; the next journaled operation expires the previous single-level undo copy.
+
+Restoration and cleanup accept only immediate children of the owned library/staging roots and reject symbolic links or junctions. A conflicting restored directory is never overwritten. Core regression tests cover durable-before-mutation ordering, persistence failure, rename/delete restoration after journal reload, staging rollback, path escape refusal, and expiration of the previous staged set. No UI, dependency, or registry access boundary changed; `RegistryApplier` remains the only registry writer.
+
+The full Core suite passes 111 tests on Windows, including old snapshot compatibility, occupied-directory preservation, and actual junction/ancestor refusal. The x64 Release publish passes `--smoke-test`; ARM64 publishes successfully, with native execution left to CI.
+
 ## 2026-10-29: Signature sets are generated, not hand-drawn
 
 - **`tools/SetForge` draws all 12 sets** from shared vector geometry (`Shapes.cs`) and per-set styles (`Themes.cs`), using SkiaSharp. One shape change updates every set; one style tweak updates all 17 pointers of a set. The output (`sets/<id>/`) is committed, so building the app never needs the tool.
