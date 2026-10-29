@@ -32,6 +32,7 @@ public partial class App : Application
         catch (Exception ex)
         {
             AppLog.Error("Startup failed", ex);
+            AppLog.Info(ex.ToString().Replace(Environment.NewLine, " | "));
             if (smokeTest)
                 Environment.Exit(1);
             throw;
